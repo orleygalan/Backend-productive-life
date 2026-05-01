@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DailyTask\StoreDailyTaskRequest;
 use App\Http\Requests\DailyTask\UpdateDailyTaskRequest;
+use App\Http\Resources\DailyTaskResource;
 use App\Models\DailyTask;
 use App\Services\DailyTaskService;
 use Illuminate\Http\JsonResponse;
@@ -24,17 +25,17 @@ class DailyTaskController extends Controller
     public function index(Request $request): JsonResponse
     {
         $dailyTasks = $this->dailyTaskService->getAll($request->query('date'));
-        return response()->json($dailyTasks);
+        return response()->json(DailyTaskResource::collection($dailyTasks));
     }
 
     /**
      * Store a newly created resource in storage.
      */
     // POST /api/daily-tasks
-    public function store(StoreDailyTaskRequest $request)
+    public function store(StoreDailyTaskRequest $request): JsonResponse
     {
         $dailyTask = $this->dailyTaskService->store($request->validated());
-        return response()->json($dailyTask, 201);
+        return response()->json(new DailyTaskResource($dailyTask), 201);
     }
 
     /**
@@ -44,7 +45,7 @@ class DailyTaskController extends Controller
     public function update(UpdateDailyTaskRequest $request, DailyTask $dailyTask): JsonResponse
     {
         $dailyTask = $this->dailyTaskService->update($dailyTask, $request->validated());
-        return response()->json($dailyTask);
+        return response()->json(new DailyTaskResource($dailyTask));
     }
 
     /**
@@ -61,13 +62,13 @@ class DailyTaskController extends Controller
     public function complete(DailyTask $dailyTask): JsonResponse
     {
         $dailyTask = $this->dailyTaskService->complete($dailyTask);
-        return response()->json($dailyTask);
+        return response()->json(new DailyTaskResource($dailyTask));
     }
 
     // PATCH /api/daily-tasks/{dailyTask}/uncomplete
     public function uncomplete(DailyTask $dailyTask): JsonResponse
     {
         $dailyTask = $this->dailyTaskService->uncomplete($dailyTask);
-        return response()->json($dailyTask);
+        return response()->json(new DailyTaskResource($dailyTask));
     }
 }

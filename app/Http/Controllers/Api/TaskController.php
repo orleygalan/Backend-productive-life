@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\StoreTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Project;
 use App\Models\Task;
 use App\Services\TaskService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TaskController extends Controller
 {
@@ -25,7 +26,7 @@ class TaskController extends Controller
     public function index(Project $project): JsonResponse
     {
         $tasks = $this->taskService->getAll($project);
-        return response()->json($tasks);
+        return response()->json(TaskResource::collection($tasks));
     }
 
     /**
@@ -35,7 +36,7 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request): JsonResponse
     {
         $task = $this->taskService->store($request->validated());
-        return response()->json($task, 201);
+        return response()->json(new TaskResource($task), 201);
     }
 
     /**
@@ -45,7 +46,7 @@ class TaskController extends Controller
     public function show(Task $task): JsonResponse
     {
         $task = $this->taskService->show($task);
-        return response()->json($task);
+        return response()->json(new TaskResource($task));
     }
 
     /**
@@ -55,7 +56,7 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, Task $task): JsonResponse
     {
         $task = $this->taskService->update($task, $request->validated());
-        return response()->json($task);
+        return response()->json(new TaskResource($task));
     }
 
     /**
@@ -76,6 +77,6 @@ class TaskController extends Controller
         ]);
 
         $task = $this->taskService->changeStatus($task, $request->status);
-        return response()->json($task);
+        return response()->json(new TaskResource($task));
     }
 }

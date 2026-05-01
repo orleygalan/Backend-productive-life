@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Organization\StoreOrganizationRequest;
 use App\Http\Requests\Organization\UpdateOrganizationRequest;
+use App\Http\Resources\OrganizationResource;
 use App\Models\Organization;
 use App\Services\OrganizationService;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Illuminate\Http\JsonResponse;
 
 class OrganizationController extends Controller
 {
@@ -24,7 +24,7 @@ class OrganizationController extends Controller
     public function index(): JsonResponse
     {
         $organizations = $this->organizationService->getAll();
-        return response()->json($organizations);
+        return response()->json(OrganizationResource::collection($organizations));
     }
 
     /**
@@ -34,7 +34,7 @@ class OrganizationController extends Controller
     public function store(StoreOrganizationRequest $request): JsonResponse
     {
         $organizations = $this->organizationService->store($request->validated());
-        return response()->json($organizations, 201);
+        return response()->json(new OrganizationResource($organizations), 201);
     }
 
     /**
@@ -45,7 +45,7 @@ class OrganizationController extends Controller
     {
         $this->authorize('view', $organization);
         $organization = $this->organizationService->show($organization);
-        return response()->json($organization);
+        return response()->json(new OrganizationResource($organization));
     }
 
     /**
@@ -56,7 +56,7 @@ class OrganizationController extends Controller
     {
         $this->authorize('update', $organization);
         $organization = $this->organizationService->update($organization, $request->validated());
-        return response()->json($organization);
+        return response()->json(new OrganizationResource($organization));
     }
 
     /**

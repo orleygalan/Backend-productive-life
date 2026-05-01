@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\UserPoints;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class AuthService
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'],
-            'mode' => 'life', 
+            'mode' => 'life',
         ]);
 
         UserPoints::create([
@@ -30,7 +31,7 @@ class AuthService
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return [
-            'user' => $user,
+            'user' => new UserResource($user),
             'token' => $token,
         ];
     }
@@ -52,7 +53,7 @@ class AuthService
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return [
-            'user' => $user->load('points'),
+            'user' => new UserResource($user->load('points')),
             'token' => $token,
         ];
     }
@@ -64,16 +65,16 @@ class AuthService
     }
 
     // Cambiar modo work | life
-    public function switchMode(string $mode): User
+    public function switchMode(string $mode): UserResource
     {
         $user = Auth::user();
         $user->update(['mode' => $mode]);
-        return $user->fresh();
+        return new UserResource($user->fresh());
     }
 
     // Perfil del usuario autenticado
-    public function profile(): User
+    public function profile(): UserResource
     {
-        return Auth::user()->load('points');
+        return new UserResource(Auth::user()->load('points'));
     }
 }

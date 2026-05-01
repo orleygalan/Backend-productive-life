@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reward\StoreRewardRequest;
 use App\Http\Requests\Reward\UpdateRewardRequest;
+use App\Http\Resources\RewardResource;
 use App\Models\Reward;
 use App\Services\RewardService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class RewardController extends Controller
 {
@@ -25,7 +25,7 @@ class RewardController extends Controller
     public function index(): JsonResponse
     {
         $rewards = $this->rewardService->getAll();
-        return response()->json($rewards);
+        return response()->json(RewardResource::collection($rewards));
     }
 
     /**
@@ -35,7 +35,7 @@ class RewardController extends Controller
     public function store(StoreRewardRequest $request): JsonResponse
     {
         $reward = $this->rewardService->store($request->validated());
-        return response()->json($reward, 201);
+        return response()->json(new RewardResource($reward), 201);
     }
 
     /**
@@ -45,7 +45,7 @@ class RewardController extends Controller
     public function update(UpdateRewardRequest $request, Reward $reward): JsonResponse
     {
         $reward = $this->rewardService->update($reward, $request->validated());
-        return response()->json($reward);
+        return response()->json(new RewardResource($reward));
     }
 
     /**
