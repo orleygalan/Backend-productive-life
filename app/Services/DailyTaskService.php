@@ -18,7 +18,7 @@ class DailyTaskService
 
         return DailyTask::where('user_id', Auth::id())
             ->whereDate('task_date', $date)
-            ->get();
+            ->paginate(20);
     }
 
     // Crear tarea diaria 

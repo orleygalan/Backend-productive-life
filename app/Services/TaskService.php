@@ -11,7 +11,7 @@ class TaskService
     public function getAll(Project $project)
     {
         $this->checkMember($project);
-        return $project->tasks()->with('assignedTo')->get();
+        return $project->tasks()->with('assignedTo')->paginate(20);
     }
 
     // crear tarea 

@@ -25,7 +25,7 @@ class DailyTaskController extends Controller
     public function index(Request $request): JsonResponse
     {
         $dailyTasks = $this->dailyTaskService->getAll($request->query('date'));
-        return response()->json(DailyTaskResource::collection($dailyTasks));
+        return DailyTaskResource::collection($dailyTasks)->response();
     }
 
     /**

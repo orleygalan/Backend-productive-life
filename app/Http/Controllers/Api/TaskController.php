@@ -26,7 +26,7 @@ class TaskController extends Controller
     public function index(Project $project): JsonResponse
     {
         $tasks = $this->taskService->getAll($project);
-        return response()->json(TaskResource::collection($tasks));
+        return TaskResource::collection($tasks)->response();
     }
 
     /**
