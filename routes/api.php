@@ -48,8 +48,8 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
 
     // Daily-task 
     Route::apiResource('daily-tasks', DailyTaskController::class)->except(['show']);
-    Route::patch('daily-tasks/{daily-task}/complete', [DailyTaskController::class, 'complete']);
-    Route::patch('daily-tasks/{daily-task}/uncomplete', [DailyTaskController::class, 'uncomplete']);
+    Route::patch('daily-tasks/{daily_task}/complete', [DailyTaskController::class, 'complete']);
+    Route::patch('daily-tasks/{daily_task}/uncomplete', [DailyTaskController::class, 'uncomplete']);
 
     // Reward 
     Route::apiResource('rewards', RewardController::class)->except(['show']);
