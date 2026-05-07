@@ -123,7 +123,7 @@ class DailyTaskService
                 'week_start' => $weekStart,
             ],
             [
-                'week_end_date' => $weekEnd,
+                'week_end' => $weekEnd,
                 'total_points' => 0,
             ],
         );
