@@ -9,6 +9,7 @@ class WeeklyPointsSummary extends Model
 {
     use HasUuids;
 
+    protected $table = 'weekly_points_summary';
     protected $fillable = [
         'total_points',
         'week_start',
