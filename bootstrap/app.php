@@ -91,12 +91,12 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
 
-        // Solo atrapa errores HTTP genericos
+        // Solo atrapa errores HTTP con el mensaje real que se corresponde
         $exceptions->render(function (HttpException $e, $request) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => $e->getStatusCode(),
+                    'message' => $e->getMessage(),
                 ], $e->getStatusCode());
             }
         });
