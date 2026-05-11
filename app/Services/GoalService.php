@@ -88,7 +88,7 @@ class GoalService
         $range = Goal::xpRange($goal->term);
 
         if ($data['xp_per_day'] < $range['min'] || $data['xp_per_day'] > $range['max']) {
-            abort(422, "El XP debe estar entre {$range['min']} y {$range['max']} para una meta de {$goal->termLabel()}.");
+            abort(422, "El XP debe estar entre {$range['min']} y {$range['max']} para una meta de " . Goal::termLabel($goal->term) . ".");
         }
 
         return $goal->tasks()->create([
