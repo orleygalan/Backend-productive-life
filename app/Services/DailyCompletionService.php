@@ -65,7 +65,7 @@ class DailyCompletionService
                 userId: $userId,
                 amount: $task->xp_per_day,
                 type: 'daily_task',
-                description: "Tarea '{$task->title}' completada — Meta: '{$goal->title}'",
+                description: "Tarea '{$task->title}' completada - Meta: '{$goal->title}'",
                 goalId: $goal->id,
                 goalTaskId: $task->id,
             );
@@ -94,11 +94,10 @@ class DailyCompletionService
 
         DB::transaction(function () use ($completion, $goal, $task, $userId) {
             // Restar puntos
-            $this->pointService->subtractPoints(
+            $this->pointService->subtractEarned(
                 userId: $userId,
                 amount: $task->xp_per_day,
-                type: 'daily_task',
-                description: "Tarea '{$task->title}' desmarcada — Meta: '{$goal->title}'",
+                description: "Tarea '{$task->title}' desmarcada - Meta: '{$goal->title}'",
                 goalId: $goal->id,
                 goalTaskId: $task->id,
             );

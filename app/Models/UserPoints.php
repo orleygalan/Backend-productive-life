@@ -30,7 +30,14 @@ class UserPoints extends Model
         $this->increment('total_earned', $amount);
     }
 
-    // Restar puntos gastados
+    // Solo resta del balance, NO cuenta como gasto se usa al desmarcar tareas diarias
+    public function subtractEarned(int $amount): void
+    {
+        $this->decrement('balance', $amount);
+        $this->decrement('total_earned', $amount);
+    }
+
+    // Resta del balance Y cuenta como gasto se usa SOLO al canjear recompensas
     public function spendPoints(int $amount): void
     {
         $this->decrement('balance', $amount);

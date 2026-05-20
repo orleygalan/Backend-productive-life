@@ -36,7 +36,7 @@ class PointService
         ]);
     }
 
-    // Restar puntos
+    // Restar puntos al desmarcar una tarea, SI cuenta como gasto SOLO al canjear recompensas
     public function subtractPoints(
         string $userId,
         int $amount,
@@ -56,6 +56,28 @@ class PointService
             'goal_task_id' => $goalTaskId,
             'amount' => -$amount,
             'type' => $type,
+            'description' => $description,
+        ]);
+    }
+
+    // Restar puntos al desmarcar una tarea, NO es gasto
+    public function subtractEarned(
+        string $userId,
+        int $amount,
+        string $description,
+        ?string $goalId = null,
+        ?string $goalTaskId = null,
+    ): void {
+        $userPoints = UserPoints::where('user_id', $userId)->firstOrFail();
+        $userPoints->subtractEarned($amount);
+
+        // Registrar en el log con amount negativo
+        PointLog::create([
+            'user_id' => $userId,
+            'goal_id' => $goalId,
+            'goal_task_id' => $goalTaskId,
+            'amount' => -$amount,
+            'type' => 'daily_task',
             'description' => $description,
         ]);
     }
